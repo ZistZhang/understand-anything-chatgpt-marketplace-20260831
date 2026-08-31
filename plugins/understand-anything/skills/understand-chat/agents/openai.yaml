@@ -1,10 +1,5 @@
 interface:
-  display_name: Understand Chat
-  short_description: Ask broad questions against an existing project graph
+  display_name: "Understand Chat"
+  short_description: "Ask broad questions against an existing project graph"
 policy:
-  products:
-  - chatgpt
-  - codex
-  - api
-  - atlas
   allow_implicit_invocation: true

@@ -1,10 +1,5 @@
 interface:
-  display_name: Understand Dashboard
-  short_description: Open the interactive graph dashboard
+  display_name: "Understand Dashboard"
+  short_description: "Open the interactive graph dashboard"
 policy:
-  products:
-  - chatgpt
-  - codex
-  - api
-  - atlas
   allow_implicit_invocation: true

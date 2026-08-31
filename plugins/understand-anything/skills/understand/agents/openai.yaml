@@ -1,5 +1,5 @@
 interface:
-  display_name: Understand
-  short_description: Build or refresh the persistent codebase graph
+  display_name: "Understand"
+  short_description: "Build or refresh the persistent codebase graph"
 policy:
   allow_implicit_invocation: true

@@ -1,10 +1,5 @@
 interface:
-  display_name: Understand Diff
-  short_description: Map code changes to architectural impact and risk
+  display_name: "Understand Diff"
+  short_description: "Map code changes to architectural impact and risk"
 policy:
-  products:
-  - chatgpt
-  - codex
-  - api
-  - atlas
   allow_implicit_invocation: true

@@ -1,10 +1,5 @@
 interface:
-  display_name: Understand Figma
-  short_description: Build a persistent design graph from Figma
+  display_name: "Understand Figma"
+  short_description: "Build a persistent design graph from Figma"
 policy:
-  products:
-  - chatgpt
-  - codex
-  - api
-  - atlas
   allow_implicit_invocation: true

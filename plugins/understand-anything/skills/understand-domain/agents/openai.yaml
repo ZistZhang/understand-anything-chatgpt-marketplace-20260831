@@ -1,10 +1,5 @@
 interface:
-  display_name: Understand Domain
-  short_description: Extract business domains and process flows
+  display_name: "Understand Domain"
+  short_description: "Extract business domains and process flows"
 policy:
-  products:
-  - chatgpt
-  - codex
-  - api
-  - atlas
   allow_implicit_invocation: true
