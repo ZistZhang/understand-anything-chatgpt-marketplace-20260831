@@ -109,13 +109,28 @@ Start the Understand Anything dashboard to visualize the knowledge graph for the
    DASHBOARD_DIR="$PLUGIN_ROOT/packages/dashboard"
    ```
 
-4. **Fast path — try the prebuilt viewer first (no install, no build).** Each release ships a self-contained viewer tarball; run it pinned to the installed plugin version:
+4. **Fast path — use the packaged viewer first (no install, no build).** Marketplace packages include a self-contained viewer under `packages/viewer/`; run it directly when present:
    ```bash
-   : "${PLUGIN_ROOT:?Run step 3 first so PLUGIN_ROOT is set}"
-   : "${PROJECT_DIR:?Run step 1 first so PROJECT_DIR is set}"
-   PLUGIN_VERSION=$(node -p "require('$PLUGIN_ROOT/package.json').version")
-   VIEWER_URL="https://github.com/Egonex-AI/Understand-Anything/releases/download/v${PLUGIN_VERSION}/understand-anything-viewer.tgz"
-   npx --yes "$VIEWER_URL" "$PROJECT_DIR"
+    PACKAGED_VIEWER="$PLUGIN_ROOT/packages/viewer/bin/viewer.mjs"
+    if [ -f "$PACKAGED_VIEWER" ] && [ -f "$PLUGIN_ROOT/packages/viewer/dist/index.html" ]; then
+      node "$PACKAGED_VIEWER" "$PROJECT_DIR" &
+      VIEWER_PID=$!
+      echo "Packaged viewer started with PID $VIEWER_PID; capture its Dashboard URL and continue at step 7."
+    else
+      # Continue with the release/fallback paths below.
+      PACKAGED_VIEWER=""
+    fi
+    ```
+
+    If `$PACKAGED_VIEWER` is empty because the packaged viewer is unavailable, try the version-pinned release viewer:
+   ```bash
+    if [ -z "$PACKAGED_VIEWER" ]; then
+      : "${PLUGIN_ROOT:?Run step 3 first so PLUGIN_ROOT is set}"
+      : "${PROJECT_DIR:?Run step 1 first so PROJECT_DIR is set}"
+      PLUGIN_VERSION=$(node -p "require('$PLUGIN_ROOT/package.json').version")
+      VIEWER_URL="https://github.com/Egonex-AI/Understand-Anything/releases/download/v${PLUGIN_VERSION}/understand-anything-viewer.tgz"
+      npx --yes "$VIEWER_URL" "$PROJECT_DIR"
+    fi
    ```
    Run this in the background. It prints the same `🔑  Dashboard URL` line as the dev server:
    - If the line appears, **skip steps 5-6** and continue at step 7.
@@ -158,7 +173,7 @@ Start the Understand Anything dashboard to visualize the knowledge graph for the
 
 ## Notes
 
-- The fast path (step 4) downloads a version-pinned, self-contained viewer from the GitHub release — nothing is installed into the plugin directory and no build runs
+- The fast path (step 4) runs the packaged viewer directly — nothing is installed into the plugin directory and no build runs
 - The dashboard auto-opens in the default browser (both the viewer and Vite's `--open`)
 - If port 5173 is already in use, the next available port is picked (both paths)
 - In the fallback, the `GRAPH_DIR` environment variable tells the dev server where to find the knowledge graph

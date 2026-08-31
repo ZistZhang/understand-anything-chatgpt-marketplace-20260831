@@ -82,7 +82,7 @@ Determine whether to run a full analysis or incremental update.
      ```
 
      Set `UNDERSTAND_NO_WORKTREE_REDIRECT=1` if you intentionally want a per-worktree graph (rare — most users want the redirect).
-1.5. **Ensure the plugin is built.** Later phases invoke Node scripts that import `@understand-anything/core`. On a fresh install `packages/core/dist/` does not exist yet — build once.
+1.5. **Use the packaged runtime first.** Later phases invoke Node scripts that import `@understand-anything/core`. Marketplace packages include prebuilt `packages/core/dist/` and the production runtime dependencies under `node_modules/`, so a normal installed-Plugin invocation must not install packages or contact a registry.
 
    **Important:** do **not** assume the plugin root is simply two directories above the skill path string. In many installations `~/.agents/skills/understand` is a symlink into the real plugin checkout. Prefer runtime-provided plugin roots first (for Claude), then fall back to universal symlinks, skill symlink resolution, and common clone-based install paths.
 
@@ -125,8 +125,14 @@ Determine whether to run a full analysis or incremental update.
      exit 1
    fi
 
-   if [ ! -f "$PLUGIN_ROOT/packages/core/dist/index.js" ]; then
+   if [ -f "$PLUGIN_ROOT/packages/core/dist/index.js" ] && [ -f "$PLUGIN_ROOT/node_modules/@understand-anything/core/dist/index.js" ]; then
+     echo "[understand] Using packaged core runtime; no package-manager bootstrap required."
+   elif [ ! -f "$PLUGIN_ROOT/packages/core/dist/index.js" ]; then
+     echo "[understand] Packaged core runtime is absent; using source-development fallback."
      cd "$PLUGIN_ROOT" && (pnpm install --frozen-lockfile 2>/dev/null || pnpm install) && pnpm --filter @understand-anything/core build
+   else
+     echo "Error: Packaged runtime dependencies are incomplete at $PLUGIN_ROOT/node_modules."
+     exit 1
    fi
    ```
 

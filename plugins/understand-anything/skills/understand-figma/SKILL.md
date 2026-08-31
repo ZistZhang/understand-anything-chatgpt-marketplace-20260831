@@ -30,9 +30,13 @@ Analyzes a Figma file and produces an interactive design knowledge graph in the 
 
 1. Parse `$ARGUMENTS` for a Figma URL or bare file key (the non-flag token) and an optional `--language <lang>`.
 2. Resolve `PROJECT_ROOT` to the current working directory. **Resolve the data directory `$UA_DIR`** once and reuse it for every read and write below: `UA_DIR="$PROJECT_ROOT/$([ -d "$PROJECT_ROOT/.understand-anything" ] && echo .understand-anything || echo .ua)"` — the legacy `.understand-anything/` when it already exists, otherwise the new `.ua/`. Because each phase may run in a fresh shell, carry `$UA_DIR` forward like `$PROJECT_ROOT`, re-resolving it with the same line if a later command block needs it.
-3. Resolve `PLUGIN_ROOT` and ensure core is built (same logic as `/understand` Phase 0.1.5). If `packages/core/dist/figma/index.js` is missing, run:
+3. Resolve `PLUGIN_ROOT` and use the packaged core runtime first (same root-resolution logic as `/understand` Phase 0.1.5). If the packaged `packages/core/dist/figma/index.js` and its production dependencies are absent, use the source-development fallback:
    ```bash
-   cd "$PLUGIN_ROOT" && (pnpm install --frozen-lockfile 2>/dev/null || pnpm install) && pnpm --filter @understand-anything/core build
+   if [ -f "$PLUGIN_ROOT/packages/core/dist/figma/index.js" ] && [ -f "$PLUGIN_ROOT/node_modules/@understand-anything/core/dist/figma/index.js" ]; then
+     echo "[understand-figma] Using packaged core runtime; no package-manager bootstrap required."
+   else
+     cd "$PLUGIN_ROOT" && (pnpm install --frozen-lockfile 2>/dev/null || pnpm install) && pnpm --filter @understand-anything/core build
+   fi
    ```
 4. `mkdir -p $UA_DIR/intermediate`.
 
