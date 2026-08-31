@@ -1,0 +1,35 @@
+{
+  "name": "understand-anything",
+  "version": "2.9.4",
+  "description": "Build and explore persistent knowledge graphs for codebases, business domains, knowledge bases, and Figma designs.",
+  "author": {
+    "name": "Egonex-AI",
+    "url": "https://github.com/Egonex-AI"
+  },
+  "homepage": "https://understand-anything.com/",
+  "repository": "https://github.com/Egonex-AI/Understand-Anything",
+  "license": "MIT",
+  "keywords": [
+    "codebase-analysis",
+    "knowledge-graph",
+    "architecture",
+    "onboarding",
+    "impact-analysis"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Understand Anything",
+    "shortDescription": "Persistent project understanding, routing to 9 focused skills",
+    "longDescription": "Analyze unfamiliar projects into persistent knowledge graphs, then route questions to focused workflows for architecture exploration, deep explanations, impact analysis, onboarding, domain flows, dashboards, knowledge bases, and Figma designs.",
+    "developerName": "Egonex-AI",
+    "category": "Developer Tools",
+    "capabilities": ["Codebase analysis", "Knowledge graph", "Impact analysis", "Visualization"],
+    "websiteURL": "https://understand-anything.com/",
+    "defaultPrompt": [
+      "Analyze this codebase and build its project map.",
+      "Explain how this component fits into the architecture.",
+      "Show what these changes affect and why."
+    ],
+    "brandColor": "#111827"
+  }
+}

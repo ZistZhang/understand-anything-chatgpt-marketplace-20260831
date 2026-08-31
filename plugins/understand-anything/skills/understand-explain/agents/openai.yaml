@@ -1,0 +1,10 @@
+interface:
+  display_name: Understand Explain
+  short_description: Deep-dive one concrete code component
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

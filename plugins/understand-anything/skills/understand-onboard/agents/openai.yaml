@@ -1,0 +1,10 @@
+interface:
+  display_name: Understand Onboard
+  short_description: Turn a project graph into an onboarding path
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

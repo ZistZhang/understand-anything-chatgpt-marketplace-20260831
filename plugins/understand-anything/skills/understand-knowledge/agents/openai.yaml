@@ -1,0 +1,10 @@
+interface:
+  display_name: Understand Knowledge
+  short_description: Build a graph from a structured knowledge base
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
