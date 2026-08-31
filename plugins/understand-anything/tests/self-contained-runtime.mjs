@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { cpSync, existsSync, mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -29,6 +30,11 @@ try {
   writeFileSync(join(fixtureProject, "src/helper.ts"), "export function formatMessage(value: string): string { return value.trim(); }\n");
   const source = `import { formatMessage } from "./helper";\n\nexport function greet(name: string): string {\n  return formatMessage("Hello " + name);\n}\n`;
   writeFileSync(join(fixtureProject, "src/index.ts"), source);
+  const git = process.env.GIT_EXE ?? "git";
+  execFileSync(git, ["init", "-q"], { cwd: fixtureProject, stdio: "ignore" });
+  execFileSync(git, ["-c", "user.name=Runtime Test", "-c", "user.email=runtime@example.invalid", "add", "."], { cwd: fixtureProject, stdio: "ignore" });
+  execFileSync(git, ["-c", "user.name=Runtime Test", "-c", "user.email=runtime@example.invalid", "commit", "-q", "-m", "fixture"], { cwd: fixtureProject, stdio: "ignore" });
+  assert.ok(existsSync(join(fixtureProject, ".git")), "fixture must be a real Git repository");
 
   const core = await import(pathToFileURL(join(fixturePlugin, "node_modules/@understand-anything/core/dist/index.js")).href);
   const plugin = new core.TreeSitterPlugin();
